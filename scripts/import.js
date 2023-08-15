@@ -132,20 +132,20 @@ class Import {
 				if (newTags.length) {
 					// insert multiple rows only returns the last insert id
 					// to make it simple, select them again, but it may affect performance
-					const { insertId } = await this.query('INSERT INTO tag (name) VALUES ?', [newTags.map(e => [e])]);
+					const { insertId } = await this.query('REPLACE INTO tag (name) VALUES ?', [newTags.map(e => [e])]);
 					const results = await this.query('SELECT * FROM tag WHERE id >= ?', [insertId]);
 					results.forEach((e) => tagMap[e.name] = e.id);
 				}
 
-				const queries = []; 
+				const queries = [];
 				if (!galleries[gid]) {
 					inserted++;
-					queries.push(this.query('INSERT INTO gallery SET ?', {
+					queries.push(this.query('REPLACE INTO gallery SET ?', {
 						gid, token, archiver_key, title, title_jpn, category, thumb, uploader,
 						posted, filecount, filesize, expunged, rating, torrentcount
 					}));
 					if (tags.length) {
-						queries.push(this.query('INSERT INTO gid_tid (gid, tid) VALUES ?', [
+						queries.push(this.query('REPLACE INTO gid_tid (gid, tid) VALUES ?', [
 							tags.map(e => [+id, tagMap[e]])
 						]));
 					}
@@ -161,7 +161,7 @@ class Import {
 						posted, filecount, filesize, expunged, rating, torrentcount, bytorrent: 0
 					}, gid]));
 					if (addTids.length) {
-						queries.push(this.query('INSERT INTO gid_tid (gid, tid) VALUES ?', [
+						queries.push(this.query('REPLACE INTO gid_tid (gid, tid) VALUES ?', [
 							addTids.map(e => [+id, e])
 						]));
 					}
@@ -179,7 +179,7 @@ class Import {
 					console.log(`inserted gid = ${id} (${index}/${length})`);
 				}
 			}
-			
+
 			console.log(`inserts complete, inserted ${inserted} galleries`);
 			const nt = new Date();
 			console.log(`finished at ${nt}, total time ${nt - ct}ms`);
