@@ -78,13 +78,13 @@ class Sync {
 		return posted;
 	}
 
-	getPages(next = '', expunged = false) {
+	getPages(next = '', expunged = false, seekdate = "") {
 		return new Promise((resolve, reject) => {
 			try {
 				const request = https.request({
 					method: 'GET',
 					hostname: this.host,
-					path: `/?next=${next}&f_cats=0&advsearch=1&f_sname=on&f_stags=on&f_sh=${expunged ? 'on' : ''}&f_spf=&f_spt=&f_sfl=on&f_sfu=on&f_sft=on`,
+					path: `/?next=${next}&f_cats=0&advsearch=1&f_sname=on&f_stags=on&f_sh=${expunged ? 'on' : ''}&f_spf=&f_spt=&f_sfl=on&f_sfu=on&f_sft=on&f_search=language:english%24&seek=${seekdate}`,
 					headers: {
 						'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*',
 						'Accept-Language': 'en-US;q=0.9,en;q=0.8',
@@ -200,12 +200,15 @@ class Sync {
 				let page = 0;
 				let finish = false;
 				let next = '';
-
+				//2023-03-04
+				let skiptodate = "2023-05-30"
 				while (!finish) {
+					console.log(skiptodate)
 					await this.sleep(1);
 					console.log(`requesting ${expunged ? 'expunged' : 'default'} page ${page}...`);
-					const curList = await this.retryResolver(() => this.getPages(next, expunged), this.retryTimes);
+					const curList = await this.retryResolver(() => this.getPages(next, expunged,skiptodate), this.retryTimes);
 					console.log(`got ${curList[0][0]} to ${curList.slice(-1)[0][0]}`);
+					skiptodate = ""
 					curList.forEach(e => {
 						if (new Date(`${e[2].split(' ').join('T')}Z`).getTime() > lastPosted * 1000) {
 							list.push(e);
