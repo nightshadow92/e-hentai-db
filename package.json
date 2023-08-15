@@ -41,7 +41,7 @@
     "optimize-css-assets-webpack-plugin": "^5.0.4",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-hot-loader": "^4.12.10",
+    "react-hot-loader": "^4.13.1",
     "react-router-dom": "^5.0.1",
     "style-loader": "^2.0.0",
     "webpack": "^4.39.1",
