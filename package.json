@@ -38,7 +38,7 @@
     "html-webpack-plugin": "^5.5.3",
     "mini-css-extract-plugin": "^0.8.0",
     "moment": "^2.29.4",
-    "optimize-css-assets-webpack-plugin": "^5.0.4",
+    "optimize-css-assets-webpack-plugin": "^6.0.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-hot-loader": "^4.12.10",
